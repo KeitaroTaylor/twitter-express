@@ -6,8 +6,8 @@ const app = express();
 
 var db, collection;
 // database info goes here
-const url
-const dbName
+const url = "mongodb+srv://palindrome:leonnoel@cluster0.nrd65.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const dbName = "twitter"
 
 app.listen(3000, () => {
   MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
