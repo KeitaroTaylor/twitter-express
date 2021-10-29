@@ -6,8 +6,8 @@ const app = express();
 
 var db, collection;
 // database info goes here
-const url = "mongodb+srv://palindrome:leonnoel@cluster0.nrd65.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-const dbName = "twitter"
+const url = "mongodb+srv://keitarotaylor:nanticoke@cluster0.e2snc.mongodb.net/birdSightings?retryWrites=true&w=majority"
+const dbName = "birdSightings"
 
 app.listen(3000, () => {
   MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
@@ -27,18 +27,21 @@ app.use(express.static('public'))
 
 //-------------------------------GET(Read)
 app.get('/', (req, res) => {
-    db.collection('tweets').find().toArray((err, result) => {
+    db.collection('birds').find().toArray((err, result) => {
       if (err) return console.log(err)
-      res.render('index.ejs', {tweets: result})
+      res.render('index.ejs', {birds: result})
     })
 })
 
 //------------------------------PUT (Update)
-app.put('/loves', (req, res) => {
-    db.collection('tweets')
-    .findOneAndUpdate({tweet: req.body.tweet}, {
-      $inc: {
-        heart: 1,
+app.put('/birds', (req, res) => {
+    db.collection('birds')
+    .findOneAndUpdate({
+    count: req.body.count,
+    species: req.body.species,
+    }, {
+      $set: {
+        count:req.body.count + 1
       }
     }, {
       sort: {_id: -1},
@@ -49,25 +52,15 @@ app.put('/loves', (req, res) => {
     })
 })
 
-app.put('/retweets', (req, res) => {
-    db.collection('tweets')
-    .findOneAndUpdate({tweet: req.body.tweet}, {
-      $inc: {
-        retweet: 1,
-      }
-    }, {
-      sort: {_id: -1},
-      upsert: true
-    }, (err, result) => {
-      if (err) return res.send(err)
-      res.send(result)
-    })
-  })
-  
 //-------------------------------POST (create)
 
-app.post('/tweets', (req, res) => {
-    db.collection('tweets').insertOne({tweet: req.body.tweet, heart: 0, retweet: 0}, (err, result) => {
+app.post('/birds', (req, res) => {
+    db.collection('birds').insertOne({
+    date: req.body.date,
+    species: req.body.species,
+    count: req.body.count,
+    location: req.body.location
+    }, (err, result) => {
       if (err) return console.log(err)
       console.log('saved to database')
       res.redirect('/')

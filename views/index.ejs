@@ -2,32 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bootleg Twitter</title>
+  <title>Birding App</title>
   <!-- <link rel="shortcut icon" href="favicon.ico"> -->
   <!-- <link rel="stylesheet" href="styles.css"> -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
   </head>
 <body>
-  <h1>Twitter</h1>
+  <h1>Birding Tracker</h1>
 
-  <h3>Tweets</h3>
+  <form action="/birds" method="POST">
+    <input type="date" placeholder="Date" name="date">
+    <input type="text" placeholder="What species?" name="species">
+    <input type="tel" placeholder="How many?" name="count">
+    <input type="text" placeholder="Where at?" name="location">
+    <button type="submit">Submit Sighting!</button>
+  </form>
+
+  <% let count = 0 %>
+  <% let date %>
+
+  <h3>Sightings By Date</h3>
   <ul class="tweets">
-  <% for(var i=0; i<tweets.length; i++) {%>
-    <li class="message">
-      <span><%= tweets[i].tweet %></span>
-      <span><%= tweets[i].heart %></span>
-      <span><i class="fas fa-heart" aria-hidden="true"></i></span>
-      <span><%= tweets[i].retweet %></span>
-      <span><i class="fas fa-retweet" aria-hidden="true"></i></span>
-      <span><i class="fa fa-trash" aria-hidden="true"></i></span>
-    </li>
+  <% for(var i=0; i<birds.length; i++) {%>
+    <% if (date != birds[i].date) { %>
+      <% date = birds[i].date %>
+      <% count = 0 %>
+      <% count2 = 0 %>
+    <% } %>
+    <% if (count2 == 0) { %>
+      <% for (var j=0; j<birds.length; j++) { %>
+        <% if (birds[i].date == birds[j].date) { %>
+          <% if (count == 0) { %>
+            <h4><%= birds[i].date %></h4>
+          <% } %>
+          <li>
+            <span><%= birds[j].count %></span>
+            <span><%= birds[j].species %></span>
+            <span>at</span>
+            <span><%= birds[j].location %></span>
+            <span><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+            <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </li>
+          <% count++ %>
+        <% } %>
+      <% } %>
+    <% } %>
+    <% count2++ %>
   <% } %>
   </ul>
 
-  <form action="/tweets" method="POST">
-    <input type="text" placeholder="What's on your mind?" name="tweet">
-    <button type="submit">Submit</button>
-  </form>
+  <% let countOne = 0 %>
+  <% let location %>
+
+  <h3>Sightings By Location</h3>
+  <ul class="tweets">
+  <% for(var i=0; i<birds.length; i++) {%>
+    <% if (location != birds[i].location) { %>
+      <% location = birds[i].location %>
+      <% countOne = 0 %>
+      <% countTwo = 0 %>
+    <% } %>
+    <% if (countTwo == 0) { %>
+      <% for (var j=0; j<birds.length; j++) { %>
+        <% if (birds[i].location == birds[j].location) { %>
+          <% if (countOne == 0) { %>
+            <h4><%= birds[i].location %></h4>
+          <% } %>
+          <li>
+            <span><%= birds[j].count %></span>
+            <span><%= birds[j].species %></span>
+            <span>on</span>
+            <span><%= birds[j].date %></span>
+            <span><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+            <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </li>
+          <% countOne++ %>
+        <% } %>
+      <% } %>
+    <% } %>
+    <% countTwo++ %>
+  <% } %>
+  </ul>
 
   <script src="main.js"></script>
 
