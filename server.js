@@ -58,7 +58,7 @@ app.post('/birds', (req, res) => {
     db.collection('birds').insertOne({
     date: req.body.date,
     species: req.body.species,
-    count: req.body.count,
+    count: parseInt(req.body.count),
     location: req.body.location
     }, (err, result) => {
       if (err) return console.log(err)
@@ -69,8 +69,11 @@ app.post('/birds', (req, res) => {
 
 //-------------------------------Delete (delete)
 
-app.delete('/tweets', (req, res) => {
-    db.collection('tweets').findOneAndDelete({tweet: req.body.tweet}, (err, result) => {
+app.delete('/birds', (req, res) => {
+    db.collection('tweets').findOneAndDelete({
+    count: req.body.count,
+    species: req.body.species,
+    }, (err, result) => {
       if (err) return res.send(500, err)
       res.send('Message deleted!')
     })
